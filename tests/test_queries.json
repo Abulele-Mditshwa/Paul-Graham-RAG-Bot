@@ -1,0 +1,37 @@
+[
+  {
+    "query": "What does Paul Graham say about startups?",
+    "expected_topic": "Startup growth and principles",
+    "expected_themes": ["growth", "making something people want", "iteration", "launch quickly"]
+  },
+  {
+    "query": "How does Paul Graham recommend learning programming?",
+    "expected_topic": "Programming education and learning methods",
+    "expected_themes": ["working on projects", "intrinsic motivation", "practice", "reading good code"]
+  },
+  {
+    "query": "What is Paul Graham's view on economic inequality?",
+    "expected_topic": "Economic inequality essay analysis",
+    "expected_themes": ["wealth creation vs redistribution", "equal opportunity", "poverty vs inequality"]
+  },
+  {
+    "query": "What makes a good essay according to Paul Graham?",
+    "expected_topic": "Writing advice and essay structure",
+    "expected_themes": ["clarity", "surprise", "telling the truth", "conversational tone"]
+  },
+  {
+    "query": "What are Paul Graham's thoughts on Y Combinator?",
+    "expected_topic": "Y Combinator founding and philosophy",
+    "expected_themes": ["startup acceleration", "batch model", "demo day", "helping founders"]
+  },
+  {
+    "query": "Which programming language does Paul Graham prefer?",
+    "expected_topic": "Programming language preferences",
+    "expected_themes": ["Lisp", "language power", "expressiveness", "macros"]
+  },
+  {
+    "query": "How should entrepreneurs get startup ideas?",
+    "expected_topic": "Startup idea generation",
+    "expected_themes": ["solve your own problems", "organic ideas", "avoid bad ideas", "notice problems"]
+  }
+]
