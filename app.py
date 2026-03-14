@@ -4,6 +4,19 @@
 This is the main entry point for the RAG (Retrieval-Augmented Generation) system
 that enables intelligent conversations with Paul Graham's essay collection.
 
+🚨 IMPORTANT FOR TESTERS/REVIEWERS:
+Before running this application, you MUST configure your own AWS resources:
+
+1. Create your own Bedrock Knowledge Base with Paul Graham essays
+2. Set up your own OpenSearch Serverless collection
+3. Ensure access to Claude 3 Haiku in your AWS account
+4. Update the configuration in src/config.py OR set environment variables:
+   - KNOWLEDGE_BASE_ID="your_knowledge_base_id"
+   - OPENSEARCH_COLLECTION_NAME="your_collection_name"
+   - AWS_REGION="your_preferred_region"
+
+The default configuration will NOT work as it uses the original developer's resources.
+
 WHAT THIS FILE DOES:
 - Sets up the Python path to find our source code
 - Imports and runs the Streamlit web application
