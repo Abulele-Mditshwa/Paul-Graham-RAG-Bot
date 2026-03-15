@@ -12,8 +12,6 @@ sys.path.append(str(Path(__file__).parent / "src"))
 
 from config import load_config
 from services.rag_service import RAGService
-from services.ingestion_service import DataIngestionService
-from clients.opensearch_client import OpenSearchServerlessClient
 from models.chat_models import MessageRole, ChatMessage
 
 
@@ -149,36 +147,40 @@ def test_rag_workflows(config):
         return False
 
 
-def test_ingestion_service(config):
-    """Test ingestion service (informational)."""
-    print_header("INGESTION SERVICE TEST")
+def test_system_status(config):
+    """Test overall system status and configuration."""
+    print_header("SYSTEM STATUS TEST")
     
     try:
-        ingestion_service = DataIngestionService(config)
+        rag_service = RAGService(config)
         
-        # Get Knowledge Base info
-        print_section("Knowledge Base Information")
-        kb_info = ingestion_service.get_knowledge_base_info()
-        if kb_info['success']:
-            print(f"✅ Knowledge Base details:")
-            print(f"   - Name: {kb_info['name']}")
-            print(f"   - Status: {kb_info['status']}")
-            print(f"   - Description: {kb_info.get('description', 'N/A')}")
-            print(f"   - Created: {kb_info.get('created_at', 'N/A')}")
-        else:
-            print(f"❌ Could not get KB info: {kb_info['error']}")
+        # Test system status
+        print_section("System Status Check")
+        status = rag_service.get_system_status()
         
-        # List data sources
-        print_section("Data Sources")
-        ds_info = ingestion_service.list_data_sources()
-        if ds_info['success']:
-            print(f"📁 Found {ds_info['total_count']} data sources:")
-            for ds in ds_info['data_sources']:
-                print(f"   - {ds['name']} ({ds['status']}): {ds.get('description', 'No description')}")
+        # Knowledge Base status
+        kb_status = status['knowledge_base']
+        if kb_status['success']:
+            print("✅ Knowledge Base: Connected")
+            print(f"   - Knowledge Base ID: {kb_status['knowledge_base_id']}")
+            print(f"   - Model ID: {kb_status['model_id']}")
+            print(f"   - Test Response Length: {kb_status['test_response_length']} chars")
+            print(f"   - Sources Found: {kb_status['sources_found']}")
         else:
-            print(f"❌ Could not list data sources: {ds_info['error']}")
+            print(f"❌ Knowledge Base: {kb_status.get('error', 'Connection failed')}")
+        
+        # Configuration
+        config_info = status['config']
+        print_section("Configuration")
+        print(f"📋 Knowledge Base ID: {config_info['knowledge_base_id']}")
+        print(f"📋 Model ID: {config_info['model_id']}")
+        print(f"📋 Region: {config_info['region']}")
         
         return True
+        
+    except Exception as e:
+        print(f"❌ System status test failed: {e}")
+        return False
         
     except Exception as e:
         print(f"❌ Ingestion service test failed: {e}")
@@ -236,7 +238,7 @@ def main():
         ("OpenSearch Connection", lambda: test_opensearch_connection(config)),
         ("Knowledge Base Operations", lambda: test_knowledge_base_operations(config)),
         ("RAG Workflows", lambda: test_rag_workflows(config)),
-        ("Ingestion Service", lambda: test_ingestion_service(config)),
+        ("System Status", lambda: test_system_status(config)),
         ("Chat Conversation", lambda: test_chat_conversation(config))
     ]
     

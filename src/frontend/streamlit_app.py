@@ -13,7 +13,6 @@ sys.path.append(str(Path(__file__).parent.parent))
 from config import load_config
 from models.chat_models import ChatMessage, MessageRole
 from services.rag_service import RAGService, ChatSessionManager
-from services.ingestion_service import DataIngestionService
 
 
 class StreamlitRAGApp:
@@ -23,7 +22,6 @@ class StreamlitRAGApp:
         self.config = load_config()
         self.rag_service = RAGService(self.config)
         self.session_manager = ChatSessionManager()
-        self.ingestion_service = DataIngestionService(self.config)
         
         # Initialize session state
         self._initialize_session_state()
