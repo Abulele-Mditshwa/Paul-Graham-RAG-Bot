@@ -23,18 +23,18 @@ This project leverages **AWS Bedrock Knowledge Base** as the core RAG infrastruc
 - **Out-of-the-box RAG**: Complete RAG solution with minimal setup and configuration
 - **Automatic Scaling**: Serverless architecture that scales based on demand
 
-** Cost Effectiveness**
+**Cost Effectiveness**
 - **No Infrastructure Management**: Eliminates the need for dedicated servers or database maintenance
 - **Pay-per-Use**: Only pay for actual queries and storage, not idle infrastructure
 - **Reduced Development Time**: Focus on application logic rather than RAG infrastructure
 
-** Enterprise-Grade Features**
+**Enterprise-Grade Features**
 - **Automatic Chunking**: Intelligent document splitting with semantic awareness
 - **Managed Embeddings**: High-quality Amazon Titan embeddings with automatic optimization
 - **Built-in Security**: IAM integration, encryption at rest and in transit
 - **High Availability**: AWS-managed uptime and disaster recovery
 
-** Simplified Operations**
+**Simplified Operations**
 - **No Model Training**: Pre-trained embeddings and LLMs ready to use
 - **Automatic Updates**: AWS handles model updates and performance improvements
 - **Monitoring & Logging**: Built-in CloudWatch integration for observability
