@@ -42,7 +42,6 @@ The system uses AWS Bedrock Knowledge Base to:
 3. Generate AI responses using Claude 3 Haiku
 4. Provide source citations for transparency
 
-Built for AI Engineer take-home assessment.
 """
 
 import sys

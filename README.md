@@ -2,7 +2,7 @@
 
 A production-ready Retrieval-Augmented Generation (RAG) system that enables intelligent conversations with Paul Graham's complete essay collection using AWS Bedrock Knowledge Base and Claude 3 Haiku.
 
-## 🎯 Project Overview
+## Project Overview
 
 This project implements a sophisticated RAG system for the **Paul Graham Essays** knowledge base (Option A from the take-home assessment). The system allows users to ask questions about startup advice, entrepreneurship, technology, and life philosophy, receiving AI-generated responses grounded in Paul Graham's extensive writings.
 
@@ -23,18 +23,18 @@ This project leverages **AWS Bedrock Knowledge Base** as the core RAG infrastruc
 - **Out-of-the-box RAG**: Complete RAG solution with minimal setup and configuration
 - **Automatic Scaling**: Serverless architecture that scales based on demand
 
-**💰 Cost Effectiveness**
+** Cost Effectiveness**
 - **No Infrastructure Management**: Eliminates the need for dedicated servers or database maintenance
 - **Pay-per-Use**: Only pay for actual queries and storage, not idle infrastructure
 - **Reduced Development Time**: Focus on application logic rather than RAG infrastructure
 
-**🔧 Enterprise-Grade Features**
+** Enterprise-Grade Features**
 - **Automatic Chunking**: Intelligent document splitting with semantic awareness
 - **Managed Embeddings**: High-quality Amazon Titan embeddings with automatic optimization
 - **Built-in Security**: IAM integration, encryption at rest and in transit
 - **High Availability**: AWS-managed uptime and disaster recovery
 
-**🎯 Simplified Operations**
+** Simplified Operations**
 - **No Model Training**: Pre-trained embeddings and LLMs ready to use
 - **Automatic Updates**: AWS handles model updates and performance improvements
 - **Monitoring & Logging**: Built-in CloudWatch integration for observability
@@ -285,7 +285,7 @@ The evaluation framework includes:
 - **Faithfulness Score**: 92.5% average across all test cases
 - **System Uptime**: 99.9% (AWS Bedrock managed service)
 
-## 🏆 Assessment Criteria Alignment
+## Assessment Criteria
 
 ### Technical Soundness (40%)
 - ✅ **Production-ready architecture** with AWS managed services
@@ -315,7 +315,7 @@ The evaluation framework includes:
 - ✅ **Detailed README** explaining all system components
 - ✅ **Version control** with meaningful commit history
 
-## 🛠️ Development
+## Development
 
 ### Project Structure
 ```
@@ -367,10 +367,9 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
-## 📞 Contact
+## Contact
 
 **Developer**: Abulele Mditshwa  
-**Project**: AI Engineer Take-Home Assessment  
 **Repository**: [Paul Graham RAG Bot](https://github.com/Abulele-Mditshwa/Paul-Graham-RAG-Bot)
 
 ---
