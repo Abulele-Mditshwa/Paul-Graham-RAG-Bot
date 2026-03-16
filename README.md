@@ -216,7 +216,39 @@ streamlit run app.py
 7. **Access the web interface**:
 Open your browser to `http://localhost:8501`
 
-### Configuration Requirements
+## 📱 Application Screenshots
+
+### Main Interface
+The Streamlit application provides a clean, professional chat interface for interacting with Paul Graham's essays:
+
+![Streamlit App Interface](streamlit_app_screenshots/streamlit_1.png)
+
+The interface features:
+- **Chat Input**: Enter your questions about Paul Graham's essays
+- **System Status**: Connection status and configuration details in the sidebar
+- **Clean Design**: Professional, responsive layout optimized for conversations
+
+### Sample Conversations
+
+Here are examples of the RAG system in action, showing how it provides intelligent responses grounded in Paul Graham's actual writings:
+
+#### Question 1: Startup Advice
+![Sample Question 1](streamlit_app_screenshots/streamlit_sample_q_1.png)
+
+#### Question 2: Entrepreneurship Insights  
+![Sample Question 2](streamlit_app_screenshots/streamlit_sample_q_2.png)
+
+#### Question 3: Business Strategy
+![Sample Question 3](streamlit_app_screenshots/streamlit_sample_q_3.png)
+
+#### Question 4: Founder Guidance
+![Sample Question 4](streamlit_app_screenshots/streamlit_sample_q-4.png)
+
+Each response includes:
+- **AI-Generated Answer**: Intelligent responses based on Paul Graham's essays
+- **Source Citations**: References to specific essays used to generate the answer
+- **Conversation Flow**: Maintains context across multiple questions
+- **Fast Response Times**: Typically 2-5 seconds per query### Configuration Requirements
 
 ⚠️ **Critical Setup Notes**:
 
