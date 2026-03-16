@@ -1,5 +1,43 @@
 """
-RAG Service - Orchestrates retrieval and generation operations.
+🔧 RAG SERVICE - ORCHESTRATES RETRIEVAL AND GENERATION OPERATIONS
+
+This is the core service that orchestrates the RAG (Retrieval-Augmented Generation) pipeline
+for the Paul Graham Essays chatbot system.
+
+WHAT THIS SERVICE DOES:
+- Coordinates between the frontend and AWS Bedrock Knowledge Base
+- Manages chat sessions and conversation history
+- Provides two RAG approaches: integrated (recommended) and separate steps
+- Handles system status monitoring and health checks
+- Formats responses for the frontend display
+
+KEY COMPONENTS:
+1. RAGService: Main orchestrator for chat operations
+2. ChatSessionManager: Manages conversation history and sessions
+
+ARCHITECTURE FLOW:
+    Streamlit App → RAGService → BedrockKnowledgeBaseClient → AWS Bedrock → AI Response
+
+The service provides two approaches:
+1. INTEGRATED (Recommended): Single API call to Bedrock handles everything
+   - Vector search + AI generation in one step
+   - Automatic context preparation
+   - Built-in source citations
+   
+2. SEPARATE STEPS: Manual control over each RAG step
+   - Explicit document retrieval
+   - Manual context preparation  
+   - Separate AI generation call
+
+USAGE:
+    # Initialize service
+    rag_service = RAGService(config)
+    
+    # Chat with integrated approach (recommended)
+    response = rag_service.chat_with_knowledge_base("What is founder mode?")
+    
+    # Chat with separate steps (more control)
+    response = rag_service.chat_with_separate_steps("How to get startup ideas?")
 """
 
 import time
