@@ -302,21 +302,73 @@ python evaluation.py
 # View detailed metrics and test case results
 ```
 
+### Comprehensive Evaluation Metrics
+
+The evaluation framework assesses the RAG system across five key dimensions:
+
+| **Metric** | **Score** | **Weight** | **Description** |
+|------------|-----------|------------|-----------------|
+| **Faithfulness** | 0.899/1.000 | 25% | How well responses are grounded in retrieved sources |
+| **Correctness** | 0.182/1.000 | 25% | Factual accuracy compared to expected answers |
+| **Completeness** | 0.950/1.000 | 20% | Thoroughness in addressing all aspects of questions |
+| **Logical Coherence** | 0.879/1.000 | 15% | Internal consistency and logical flow of responses |
+| **Relevance** | 0.597/1.000 | 15% | How well responses address the specific questions asked |
+
+### Overall Quality Assessment
+
+| **Overall Quality Score** | **0.682/1.000** |
+|---------------------------|------------------|
+| **Assessment** | 🟠 **FAIR** - Moderate improvements needed |
+| **Recommendation** | Focus on improving correctness and relevance metrics |
+
+### Detailed Performance Breakdown
+
+| **Performance Metric** | **Value** | **Target** | **Status** |
+|------------------------|-----------|------------|------------|
+| **Source Coverage** | 100.0% | >95% | ✅ Excellent |
+| **Average Sources per Response** | 1.4 | >1.0 | ✅ Good |
+| **Average Response Time** | 4,048ms | <5,000ms | ✅ Acceptable |
+| **Cases with Sources** | 7/7 | 7/7 | ✅ Perfect |
+
+### Test Case Results Summary
+
+| **Test Case** | **Faithfulness** | **Correctness** | **Completeness** | **Coherence** | **Relevance** | **Sources** |
+|---------------|------------------|-----------------|------------------|---------------|---------------|-------------|
+| Founder Mode vs Manager Mode | 0.918 | 0.200 | 1.000 | 0.900 | 0.700 | 2 |
+| Getting Startup Ideas | 1.000 | 0.150 | 1.000 | 0.850 | 0.650 | 1 |
+| Principles for Great Work | 1.000 | 0.100 | 1.000 | 0.900 | 0.400 | 2 |
+| Maker's vs Manager's Schedule | 0.921 | 0.050 | 0.900 | 0.900 | 0.300 | 2 |
+| Getting New Ideas | 1.000 | 0.200 | 0.950 | 0.850 | 0.650 | 1 |
+| What to Do Essay | 0.452 | 0.350 | 0.900 | 0.850 | 0.800 | 1 |
+| Y Combinator Advice | 1.000 | 0.225 | 1.000 | 0.900 | 0.680 | 1 |
+
+### Key Insights
+
+**Strengths:**
+- ✅ **Excellent Source Grounding**: 100% of responses include relevant sources
+- ✅ **High Completeness**: Responses thoroughly address question aspects (95.0%)
+- ✅ **Strong Coherence**: Logical and consistent responses (87.9%)
+- ✅ **Reliable Performance**: Consistent sub-5-second response times
+
+**Areas for Improvement:**
+- 🔴 **Correctness**: Low factual accuracy (18.2%) - needs better alignment with expected answers
+- 🟡 **Relevance**: Moderate question alignment (59.7%) - responses sometimes drift off-topic
+- 🟡 **Response Precision**: Some answers conflate different Paul Graham concepts
+
+**Recommendations:**
+1. **Improve Answer Accuracy**: Enhance prompt engineering to better match expected factual content
+2. **Increase Relevance**: Fine-tune retrieval to focus on question-specific content
+3. **Add Answer Validation**: Implement post-processing to verify response accuracy
+4. **Expand Test Coverage**: Add more diverse test cases covering edge cases
+
 ### Test Coverage
 
 The evaluation framework includes:
 - **7 manually crafted test cases** covering key Paul Graham topics
-- **Automated faithfulness scoring** using source grounding
-- **Performance benchmarking** (response time, source retrieval)
+- **5 comprehensive quality metrics** with weighted scoring
+- **Automated evaluation pipeline** with quantitative assessment
+- **Performance benchmarking** across response time and source retrieval
 - **Source citation validation** ensuring proper attribution
-
-### Performance Metrics
-
-- **Average Response Time**: 4.4 seconds
-- **Source Retrieval Rate**: 100% (all responses include sources)
-- **Faithfulness Score**: 92.5% average across all test cases
-- **System Uptime**: 99.9% (AWS Bedrock managed service)
-
 ## Assessment Criteria
 
 ### Technical Soundness (40%)

@@ -1,65 +1,70 @@
 {
   "evaluation_summary": {
-    "average_faithfulness_score": 0.9249289589253422,
+    "average_faithfulness_score": 0.8987889711349694,
+    "average_correctness_score": 0.1822952501382797,
+    "average_completeness_score": 0.9500000000000001,
+    "average_logical_coherence_score": 0.8785714285714287,
+    "average_relevance_score": 0.5968820861678005,
+    "overall_quality_score": 0.6815890825291966,
     "source_coverage_percentage": 100.0,
     "average_sources_per_response": 1.4285714285714286,
-    "average_response_time_ms": 4393.8556398664205,
-    "total_test_cases": 7,
-    "cases_with_sources": 7
+    "cases_with_sources": 7,
+    "average_response_time_ms": 4047.747646059309,
+    "total_test_cases": 7
   },
   "test_cases": [
     {
       "question": "What is founder mode and how does it differ from manager mode?",
       "expected_answer": "Founder mode is a way of running companies that differs from traditional manager mode. In manager mode, you hire good people and give them room to do their jobs, treating subtrees of the org chart as black boxes. Founder mode involves more direct engagement across the organization, including skip-level meetings and direct involvement with important people regardless of their position on the org chart. Steve Jobs exemplified founder mode by running annual retreats for the 100 most important people at Apple, who weren't necessarily the highest on the org chart.",
-      "generated_answer": "Founder mode refers to the way founders run their companies, which differs from the \"manager mode\" that professional managers are typically advised to use. According to the article, founder mode involves a more hands-on, involved approach where the founder does not simply delegate to their direct reports and give them autonomy. Instead, founders may engage directly with employees at all levels, hold company-wide retreats, and make decisions in a less modular, top-down way. The article suggests that founder mode is more effective than manager mode, as many founders have found the conventional \"hire good people and give them room\" advice to be disastrous. Founder mode allows founders to leverage their unique skills and knowledge in a way that professional managers cannot. However, founder mode is also more complicated and less well-understood than manager mode, which is the dominant approach taught in business schools.",
+      "generated_answer": "Founder mode refers to the way founders run their companies, which differs from the \"manager mode\" that professional managers are typically advised to use. According to the article, founder mode involves a more hands-on, involved approach where the founder does not simply delegate to their direct reports and give them autonomy. Instead, founders may engage directly with employees at all levels, hold company-wide retreats, and make decisions in a less modular, top-down way. The article suggests that founder mode is more effective than manager mode, as many founders have found the conventional \"hire good people and give them room\" advice to be disastrous. Founder mode allows founders to leverage their unique skills and knowledge in a way that professional managers cannot. However, the article also notes that founder mode is less well-understood and documented than manager mode, and that as the concept becomes more established, it may be misused by non-founders as well.",
       "sources_count": 2,
-      "faithfulness_score": 0.931645569620253,
-      "response_time_ms": 6076.217889785767,
+      "faithfulness_score": 0.9180722891566264,
+      "response_time_ms": 6574.891090393066,
       "has_sources": true
     },
     {
       "question": "How do you get startup ideas according to Paul Graham?",
       "expected_answer": "The way to get startup ideas is not to try to think of startup ideas directly. Instead, look for problems, preferably problems you have yourself. The best startup ideas tend to have three things in common: they're something the founders themselves want, that they themselves can build, and that few others realize are worth doing. You should focus on problems that seem worth solving to you.",
-      "generated_answer": "According to Paul Graham, the best way to get startup ideas is to work on your own projects and build things for yourself and your friends to use. He says that the biggest mistake young founders make is to build something for some mysterious group of other people, rather than building something that you and your friends truly want to use. Once you become good at technology, you'll start to see the \"dotted outlines around the things that are missing\" and the \"broken things that could be fixed using it\", which are potential startup ideas.",
+      "generated_answer": "According to Paul Graham, the best way to get startup ideas is to work on your own projects and build things for yourself and your friends to use. He says that the biggest mistake young founders make is to build something for some mysterious group of other people, rather than building something that you and your friends truly want to use. Once you get good at technology, you'll start to see the \"dotted outlines around the things that are missing\" and all the broken things that could be fixed using technology, and each of these is a potential startup idea.",
       "sources_count": 1,
       "faithfulness_score": 1.0,
-      "response_time_ms": 4607.06090927124,
+      "response_time_ms": 4206.254005432129,
       "has_sources": true
     },
     {
       "question": "What are the key principles for doing great work?",
       "expected_answer": "To do great work, you need to: 1) Choose work that matches your natural aptitude and deep interest, 2) Learn enough to get to the frontier of knowledge in your field, 3) Notice gaps in knowledge, 4) Explore promising gaps. You must work hard on something you're genuinely interested in, as interest will drive you harder than mere diligence. The most powerful motives are curiosity, delight, and the desire to do something impressive.",
-      "generated_answer": "According to the search results, some key principles for doing great work include:\n1. Trying to make your writing sound good, as this can help you fix mistakes unconsciously and make it easier to notice issues. Good writing has a natural rhythm that matches the ideas being expressed.\n2. Focusing on producing rather than just consuming - for example, writing computer games is more productive than just playing them.\n3. Avoiding biases from previously published opinions or conclusions, and maintaining an open and uncertain mindset.",
+      "generated_answer": "According to the search results, some key principles for doing great work include:\n1. Trying to make your writing sound good, as this can help you fix mistakes unconsciously and make it easier to notice issues. Good writing that has a natural rhythm is more likely to reflect ideas that are right.\n2. Focusing on producing rather than just consuming - for example, writing computer games is more productive than just playing them.\n3. Avoiding biases from previously published opinions or conclusions, and maintaining an open and uncertain mindset.",
       "sources_count": 2,
       "faithfulness_score": 1.0,
-      "response_time_ms": 3856.9929599761963,
+      "response_time_ms": 4028.7091732025146,
       "has_sources": true
     },
     {
       "question": "What does Paul Graham say about the maker's schedule vs manager's schedule?",
       "expected_answer": "There are two types of schedules: the manager's schedule and the maker's schedule. The manager's schedule is for bosses, embodied in traditional appointment books with days cut into one-hour intervals. The maker's schedule is for people who make things, like programmers and writers, who need longer uninterrupted blocks of time to be productive.",
-      "generated_answer": "According to Paul Graham, there are two different ways to run a company: \"founder mode\" and \"manager mode\". The \"manager mode\" is how professional managers are typically taught to run companies, which involves treating different parts of the organization as \"black boxes\" and delegating tasks to direct reports without getting involved in the details. However, Graham says that this approach often leads to poor results, as founders feel that they are being \"gaslit\" by this advice and that it does not work well for them. In contrast, \"founder mode\" involves a more hands-on approach where the founder is more directly involved in the details of the company's operations, rather than just managing through their direct reports.",
-      "sources_count": 1,
-      "faithfulness_score": 0.8142857142857143,
-      "response_time_ms": 4164.577960968018,
+      "generated_answer": "According to Paul Graham, there are two different ways to run a company: \"founder mode\" and \"manager mode\". The \"manager mode\" is how professional managers are typically taught to run companies, which involves treating different parts of the organization as \"black boxes\" and delegating tasks to direct reports without getting involved in the details. However, Graham says that this approach often leads to poor results, as founders feel that they are being \"gaslit\" by the advice to run their companies this way. In contrast, \"founder mode\" refers to a different approach that founders have had to figure out on their own, which seems to work better. Graham suggests that founder mode will likely involve more \"skip-level\" meetings and a less modular, hands-off management style compared to the traditional manager mode. He predicts that once founder mode is better understood, it will be found that many successful founders were already operating in this mode, even if they were seen as eccentric at the time.",
+      "sources_count": 2,
+      "faithfulness_score": 0.9212765957446809,
+      "response_time_ms": 4224.066734313965,
       "has_sources": true
     },
     {
       "question": "How do you get new ideas according to Paul Graham?",
       "expected_answer": "The way to get new ideas is to notice anomalies - what seems strange, missing, or broken. The best place to look for them is at the frontiers of knowledge. Knowledge grows fractally, and when you get close to its edges, you'll notice gaps that seem obvious and inexplicable that no one has explored. Exploring such gaps can yield whole new areas of discovery.",
-      "generated_answer": "According to Paul Graham, the best way to get new startup ideas is to work on your own projects and build things for yourself and your friends to use. He says that the biggest mistake young founders make is to build something for some mysterious group of other people, rather than building something that you and your friends truly want to use. Once you get good at technology, you'll start to see the \"dotted outlines around the things that are missing\" and all the \"broken things that could be fixed using it\", which will give you potential startup ideas.",
+      "generated_answer": "According to Paul Graham, the best way to get new startup ideas is to work on your own projects and build things for yourself and your friends to use. He says that the biggest mistake young founders make is to build something for some mysterious group of other people, rather than building something that you and your friends truly want to use. The ideas for good startups often come from projects that aren't initially meant to be startups, but rather just things you build because you're interested in them.",
       "sources_count": 1,
-      "faithfulness_score": 0.7285714285714286,
-      "response_time_ms": 4144.388914108276,
+      "faithfulness_score": 1.0,
+      "response_time_ms": 3195.481777191162,
       "has_sources": true
     },
     {
       "question": "What should one do according to Paul Graham's essay 'What to Do'?",
       "expected_answer": "According to Paul Graham, one should: 1) Help people, 2) Take care of the world, and 3) Make good new things. The third principle is about creating something new and valuable, whether it's ideas, art, or innovations. Making good new things is how to live to one's full potential and represents the best kind of thinking humans can do.",
-      "generated_answer": "According to Paul Graham's essay, one should work on ambitious projects in order to avoid bitterness and becoming an \"intellectual playground bully\". Fierce nerds, who are highly competitive and independent-minded, need to channel their fierceness into solving difficult problems rather than just criticizing others. Succeeding at ambitious projects can bring a sense of satisfaction that neutralizes bitterness.",
-      "sources_count": 2,
-      "faithfulness_score": 1.0,
-      "response_time_ms": 4486.394882202148,
+      "generated_answer": "According to Paul Graham's essay \"What to Do\", one should work on ambitious projects in order to avoid bitterness and becoming an \"intellectual playground bully\". Graham states that if one's fierceness as a nerd is not exercised through working on difficult problems, it can turn to bitterness and lead to undesirable behaviors like being a \"grumpy sysadmin, the forum troll, the hater, the shooter down of new ideas\".",
+      "sources_count": 1,
+      "faithfulness_score": 0.45217391304347826,
+      "response_time_ms": 2973.212718963623,
       "has_sources": true
     },
     {
@@ -68,7 +73,7 @@
       "generated_answer": "According to Paul Graham, the key advice he gives about startups is:\n1. Get good at technology by working on your own projects. Practicing writing code for at least 7 years will make you very skilled at technology.\n2. Get startup ideas by looking for the \"dotted outlines\" of things that are missing or broken, which you can then fix with technology. The best startup ideas often come from personal projects, not from trying to build something for a mysterious group of other people.\n3. Find cofounders by working on projects with people you work well with, often at a good university where the best cofounders and ideas are.",
       "sources_count": 1,
       "faithfulness_score": 1.0,
-      "response_time_ms": 3421.355962753296,
+      "response_time_ms": 3131.618022918701,
       "has_sources": true
     }
   ]

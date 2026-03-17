@@ -23,12 +23,16 @@ from models.chat_models import ChatMessage, MessageRole
 
 @dataclass
 class EvaluationResult:
-    """Result of evaluating a single question-answer pair."""
+    """Comprehensive evaluation result for a single test case."""
     question: str
     expected_answer: str
     generated_answer: str
     sources_count: int
     faithfulness_score: float
+    correctness_score: float
+    completeness_score: float
+    logical_coherence_score: float
+    relevance_score: float
     response_time_ms: float
     has_sources: bool
 
@@ -133,8 +137,197 @@ class RAGEvaluator:
         
         return score
     
+    def evaluate_correctness(self, question: str, generated_answer: str, expected_answer: str) -> float:
+        """
+        Evaluate factual correctness by comparing generated answer with expected answer.
+        
+        Uses keyword overlap and semantic similarity heuristics to assess
+        whether the generated answer contains the key facts from the expected answer.
+        
+        Returns a score between 0.0 and 1.0.
+        """
+        if not generated_answer.strip() or not expected_answer.strip():
+            return 0.0
+        
+        # Convert to lowercase for comparison
+        generated_lower = generated_answer.lower()
+        expected_lower = expected_answer.lower()
+        
+        # Extract key phrases and concepts
+        expected_words = set(expected_lower.split())
+        generated_words = set(generated_lower.split())
+        
+        # Remove stop words
+        stop_words = {'the', 'a', 'an', 'and', 'or', 'but', 'in', 'on', 'at', 'to', 'for', 'of', 'with', 'by', 'is', 'are', 'was', 'were', 'be', 'been', 'have', 'has', 'had', 'do', 'does', 'did', 'will', 'would', 'could', 'should', 'may', 'might', 'can', 'this', 'that', 'these', 'those'}
+        
+        expected_content = expected_words - stop_words
+        generated_content = generated_words - stop_words
+        
+        if not expected_content:
+            return 0.5  # Neutral if no content words
+        
+        # Calculate overlap of key concepts
+        overlap = len(expected_content.intersection(generated_content))
+        overlap_ratio = overlap / len(expected_content)
+        
+        # Bonus for containing key phrases
+        key_phrases_bonus = 0.0
+        if "paul graham" in generated_lower and "paul graham" in expected_lower:
+            key_phrases_bonus += 0.1
+        
+        # Check for contradictory information (penalty)
+        contradiction_penalty = 0.0
+        if "not" in generated_lower and "not" not in expected_lower:
+            contradiction_penalty = 0.1
+        
+        score = min(overlap_ratio + key_phrases_bonus - contradiction_penalty, 1.0)
+        return max(score, 0.0)
+    
+    def evaluate_completeness(self, question: str, generated_answer: str, expected_answer: str) -> float:
+        """
+        Evaluate how completely the answer addresses all aspects of the question.
+        
+        Checks if the generated answer covers the main points mentioned in the expected answer
+        and addresses all parts of multi-part questions.
+        
+        Returns a score between 0.0 and 1.0.
+        """
+        if not generated_answer.strip():
+            return 0.0
+        
+        # Check for multi-part questions
+        question_parts = []
+        if " and " in question.lower():
+            question_parts = question.lower().split(" and ")
+        elif "?" in question and question.count("?") > 1:
+            question_parts = question.split("?")[:-1]  # Remove empty last part
+        else:
+            question_parts = [question]
+        
+        # For each part, check if it's addressed
+        parts_addressed = 0
+        for part in question_parts:
+            part_keywords = set(part.lower().split()) - {'what', 'how', 'why', 'when', 'where', 'who', 'does', 'is', 'are', 'the', 'a', 'an'}
+            answer_words = set(generated_answer.lower().split())
+            
+            if len(part_keywords.intersection(answer_words)) > 0:
+                parts_addressed += 1
+        
+        # Base completeness score
+        if question_parts:
+            completeness_ratio = parts_addressed / len(question_parts)
+        else:
+            completeness_ratio = 0.5
+        
+        # Length-based completeness (longer answers tend to be more complete)
+        expected_length = len(expected_answer.split())
+        generated_length = len(generated_answer.split())
+        
+        if expected_length > 0:
+            length_ratio = min(generated_length / expected_length, 1.0)
+        else:
+            length_ratio = 0.5
+        
+        # Combine ratios with weights
+        final_score = (completeness_ratio * 0.7) + (length_ratio * 0.3)
+        return min(final_score, 1.0)
+    
+    def evaluate_logical_coherence(self, generated_answer: str) -> float:
+        """
+        Evaluate the logical coherence and internal consistency of the answer.
+        
+        Checks for contradictions, logical flow, and coherent structure.
+        
+        Returns a score between 0.0 and 1.0.
+        """
+        if not generated_answer.strip():
+            return 0.0
+        
+        sentences = generated_answer.split('.')
+        sentences = [s.strip() for s in sentences if s.strip()]
+        
+        if len(sentences) < 2:
+            return 0.8  # Short answers are generally coherent
+        
+        coherence_score = 1.0
+        
+        # Check for contradictions
+        contradiction_indicators = [
+            ("is", "is not"), ("are", "are not"), ("can", "cannot"), 
+            ("will", "will not"), ("should", "should not"), ("does", "does not")
+        ]
+        
+        answer_lower = generated_answer.lower()
+        for positive, negative in contradiction_indicators:
+            if positive in answer_lower and negative in answer_lower:
+                coherence_score -= 0.2
+        
+        # Check for logical connectors (good for coherence)
+        logical_connectors = ["however", "therefore", "because", "since", "although", "while", "furthermore", "moreover", "in addition"]
+        connector_count = sum(1 for connector in logical_connectors if connector in answer_lower)
+        
+        if connector_count > 0:
+            coherence_score += min(connector_count * 0.05, 0.15)
+        
+        # Penalty for repetitive content
+        words = generated_answer.lower().split()
+        unique_words = set(words)
+        if len(words) > 10:  # Only check for longer answers
+            repetition_ratio = len(unique_words) / len(words)
+            if repetition_ratio < 0.7:  # High repetition
+                coherence_score -= 0.1
+        
+        return max(min(coherence_score, 1.0), 0.0)
+    
+    def evaluate_relevance(self, question: str, generated_answer: str) -> float:
+        """
+        Evaluate how well the answer addresses the specific question asked.
+        
+        Checks if the answer is on-topic and directly addresses the question.
+        
+        Returns a score between 0.0 and 1.0.
+        """
+        if not generated_answer.strip() or not question.strip():
+            return 0.0
+        
+        question_lower = question.lower()
+        answer_lower = generated_answer.lower()
+        
+        # Extract key terms from question (excluding question words)
+        question_words = set(question_lower.split())
+        stop_words = {'what', 'how', 'why', 'when', 'where', 'who', 'does', 'is', 'are', 'the', 'a', 'an', 'and', 'or', 'but', 'in', 'on', 'at', 'to', 'for', 'of', 'with', 'by'}
+        
+        key_question_terms = question_words - stop_words
+        answer_words = set(answer_lower.split())
+        
+        if not key_question_terms:
+            return 0.5  # Neutral if no key terms
+        
+        # Calculate how many key question terms appear in the answer
+        term_overlap = len(key_question_terms.intersection(answer_words))
+        relevance_ratio = term_overlap / len(key_question_terms)
+        
+        # Bonus for directly addressing the question type
+        question_type_bonus = 0.0
+        if question_lower.startswith("what is") and ("is" in answer_lower or "refers to" in answer_lower):
+            question_type_bonus = 0.1
+        elif question_lower.startswith("how") and ("by" in answer_lower or "through" in answer_lower):
+            question_type_bonus = 0.1
+        elif question_lower.startswith("why") and ("because" in answer_lower or "since" in answer_lower):
+            question_type_bonus = 0.1
+        
+        # Check if answer goes off-topic (mentions unrelated concepts)
+        off_topic_penalty = 0.0
+        if len(answer_words) > 50:  # Only check longer answers
+            # If answer is very long but has low term overlap, it might be off-topic
+            if relevance_ratio < 0.3 and len(generated_answer.split()) > 100:
+                off_topic_penalty = 0.2
+        
+        final_score = relevance_ratio + question_type_bonus - off_topic_penalty
+        return max(min(final_score, 1.0), 0.0)
+    
     def evaluate_single_case(self, test_case: Dict[str, str]) -> EvaluationResult:
-        """Evaluate a single test case."""
+        """Evaluate a single test case across all metrics."""
         question = test_case["question"]
         expected_answer = test_case["expected_answer"]
         
@@ -148,9 +341,25 @@ class RAGEvaluator:
         
         response_time_ms = (time.time() - start_time) * 1000
         
-        # Evaluate faithfulness
+        # Evaluate all metrics
         faithfulness_score = self.evaluate_faithfulness(
             question, response.content, response.sources
+        )
+        
+        correctness_score = self.evaluate_correctness(
+            question, response.content, expected_answer
+        )
+        
+        completeness_score = self.evaluate_completeness(
+            question, response.content, expected_answer
+        )
+        
+        logical_coherence_score = self.evaluate_logical_coherence(
+            response.content
+        )
+        
+        relevance_score = self.evaluate_relevance(
+            question, response.content
         )
         
         return EvaluationResult(
@@ -159,6 +368,10 @@ class RAGEvaluator:
             generated_answer=response.content,
             sources_count=len(response.sources) if response.sources else 0,
             faithfulness_score=faithfulness_score,
+            correctness_score=correctness_score,
+            completeness_score=completeness_score,
+            logical_coherence_score=logical_coherence_score,
+            relevance_score=relevance_score,
             response_time_ms=response_time_ms,
             has_sources=bool(response.sources)
         )
@@ -186,14 +399,27 @@ class RAGEvaluator:
         return results, metrics
     
     def calculate_metrics(self, results: List[EvaluationResult]) -> Dict[str, float]:
-        """Calculate aggregate metrics from evaluation results."""
+        """Calculate comprehensive aggregate metrics from evaluation results."""
         if not results:
             return {}
         
         total_cases = len(results)
         
-        # Faithfulness metrics
+        # Quality metrics
         avg_faithfulness = sum(r.faithfulness_score for r in results) / total_cases
+        avg_correctness = sum(r.correctness_score for r in results) / total_cases
+        avg_completeness = sum(r.completeness_score for r in results) / total_cases
+        avg_logical_coherence = sum(r.logical_coherence_score for r in results) / total_cases
+        avg_relevance = sum(r.relevance_score for r in results) / total_cases
+        
+        # Overall quality score (weighted average)
+        overall_quality = (
+            avg_faithfulness * 0.25 +      # 25% - Source grounding
+            avg_correctness * 0.25 +       # 25% - Factual accuracy  
+            avg_completeness * 0.20 +      # 20% - Thoroughness
+            avg_logical_coherence * 0.15 + # 15% - Internal consistency
+            avg_relevance * 0.15           # 15% - Question alignment
+        )
         
         # Source grounding metrics
         cases_with_sources = sum(1 for r in results if r.has_sources)
@@ -204,12 +430,22 @@ class RAGEvaluator:
         avg_response_time = sum(r.response_time_ms for r in results) / total_cases
         
         return {
+            # Quality Metrics
             "average_faithfulness_score": avg_faithfulness,
+            "average_correctness_score": avg_correctness,
+            "average_completeness_score": avg_completeness,
+            "average_logical_coherence_score": avg_logical_coherence,
+            "average_relevance_score": avg_relevance,
+            "overall_quality_score": overall_quality,
+            
+            # Source Metrics
             "source_coverage_percentage": source_coverage * 100,
             "average_sources_per_response": avg_sources_per_response,
+            "cases_with_sources": cases_with_sources,
+            
+            # Performance Metrics
             "average_response_time_ms": avg_response_time,
-            "total_test_cases": total_cases,
-            "cases_with_sources": cases_with_sources
+            "total_test_cases": total_cases
         }
     
     def save_results(self, results: List[EvaluationResult], metrics: Dict[str, float], output_file: str = "evaluation_results.json"):
@@ -236,16 +472,47 @@ class RAGEvaluator:
         print(f"\nResults saved to {output_file}")
     
     def print_summary(self, metrics: Dict[str, float]):
-        """Print evaluation summary."""
-        print("\n" + "=" * 60)
-        print("EVALUATION SUMMARY")
-        print("=" * 60)
-        print(f"Total Test Cases: {metrics['total_test_cases']}")
-        print(f"Average Faithfulness Score: {metrics['average_faithfulness_score']:.2f}/1.00")
-        print(f"Source Coverage: {metrics['source_coverage_percentage']:.1f}%")
-        print(f"Average Sources per Response: {metrics['average_sources_per_response']:.1f}")
-        print(f"Average Response Time: {metrics['average_response_time_ms']:.0f}ms")
-        print(f"Cases with Sources: {metrics['cases_with_sources']}/{metrics['total_test_cases']}")
+        """Print comprehensive evaluation summary."""
+        print("\n" + "=" * 70)
+        print("🧪 COMPREHENSIVE RAG EVALUATION SUMMARY")
+        print("=" * 70)
+        
+        # Overall Quality
+        print(f"\n📊 OVERALL QUALITY SCORE: {metrics['overall_quality_score']:.3f}/1.000")
+        print("-" * 50)
+        
+        # Quality Metrics
+        print("📋 QUALITY METRICS:")
+        print(f"  • Faithfulness (Source Grounding): {metrics['average_faithfulness_score']:.3f}/1.000")
+        print(f"  • Correctness (Factual Accuracy):  {metrics['average_correctness_score']:.3f}/1.000")
+        print(f"  • Completeness (Thoroughness):     {metrics['average_completeness_score']:.3f}/1.000")
+        print(f"  • Logical Coherence (Consistency): {metrics['average_logical_coherence_score']:.3f}/1.000")
+        print(f"  • Relevance (Question Alignment):  {metrics['average_relevance_score']:.3f}/1.000")
+        
+        # Source Metrics
+        print(f"\n📚 SOURCE GROUNDING:")
+        print(f"  • Source Coverage: {metrics['source_coverage_percentage']:.1f}%")
+        print(f"  • Average Sources per Response: {metrics['average_sources_per_response']:.1f}")
+        print(f"  • Cases with Sources: {metrics['cases_with_sources']}/{metrics['total_test_cases']}")
+        
+        # Performance Metrics
+        print(f"\n⚡ PERFORMANCE:")
+        print(f"  • Average Response Time: {metrics['average_response_time_ms']:.0f}ms")
+        print(f"  • Total Test Cases: {metrics['total_test_cases']}")
+        
+        # Quality Assessment
+        overall_score = metrics['overall_quality_score']
+        if overall_score >= 0.9:
+            assessment = "🟢 EXCELLENT - Production ready"
+        elif overall_score >= 0.8:
+            assessment = "🟡 GOOD - Minor improvements needed"
+        elif overall_score >= 0.7:
+            assessment = "🟠 FAIR - Moderate improvements needed"
+        else:
+            assessment = "🔴 POOR - Significant improvements needed"
+        
+        print(f"\n🎯 ASSESSMENT: {assessment}")
+        print("=" * 70)
 
 
 def main():
